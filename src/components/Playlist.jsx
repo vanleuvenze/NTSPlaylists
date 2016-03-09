@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { CircularProgress } from 'material-ui'
+import { CircularProgress, Menu, MenuItem, Divider } from 'material-ui'
+import TrackInfo from './trackInfo.js'
 import '../../styles/styles.css';
-
+import h from '../../utils/formatting.js'
 
 const Playlist = ({playlist, select}) => {
   if (playlist === null) {
@@ -9,13 +10,19 @@ const Playlist = ({playlist, select}) => {
   }
   return (
     <div className='playlist'>
-      <div className='playlist-flex-container'>
-        {
-          playlist.map(function (track) {
-            return <div onClick={() => select(track.id)}>{track.track}</div>
-            // return <iframe onClick={() => select(track.id)} className='playlistItem' src={"https://www.youtube.com/embed/" + track.id} />
-          })
-        }
+        <div>
+          {
+            playlist.map(function (songInfo) {
+              if (!songInfo) { return }
+              let artistAndTitle = h.getArtistAndTitle(songInfo);
+              return (
+                <div>
+                  <TrackInfo artistAndTitle={artistAndTitle} className = 'playlistItem' select={() => select(songInfo.id)}/>
+                  <Divider/>
+                </div>
+              )
+            })
+          }
       </div>
     </div>
   )

@@ -13,7 +13,7 @@ tracklist information
 
 var getNTSTracklist = function (url) {
 
-  url = url || "http://www.nts.live/shows/the-do-you-breakfast-show/episodes/do-you-breakfast-w-charlie-bones-29th-january-2016"
+  url = url || "http://www.nts.live/shows/the-do-you-breakfast-show/episodes/do-you-breakfast-w-charlie-bones-nosedrip-3rd-march-2016"
   
   return fetch(url)
   .then(function (res) {
@@ -76,9 +76,9 @@ playlist objects.
 
 */
 
-var getPlaylist = function () {
+var getPlaylist = function (url) {
 
-  return getNTSTracklist()
+  return getNTSTracklist(url)
   .then(function (tracks) {
 
     return tracks.map(function (track) {
@@ -99,9 +99,9 @@ and returns a promise.
 
 */
 
-var createPlaylistPromiseArray = function () {
+var createPlaylistPromiseArray = function (url) {
 
-  return getPlaylist()
+  return getPlaylist(url)
   .then(function (playlist) {
     return Q.all(playlist);
   })
@@ -114,22 +114,27 @@ var createPlaylistPromiseArray = function () {
 formatPlaylistData
 uses the promise returned by createPlaylistPromiseArray and returns
 an array of formatted video objects
+IF YOU NEED ANY ADDITIONAL INFORMATION FROM THE YOUTUBE RESPONSE
+OBJECT, TWEAK HERE
 
 */
 
-var formatPlaylistData = function () {
+var formatPlaylistData = function (url) {
 
-  return createPlaylistPromiseArray()
+  return createPlaylistPromiseArray(url)
   .then(function (playlist) {
-
+    console.log(playlist)
     return playlist.map(function (track) {
+      var trackDetails = track.items[0];
 
-      var trackLocation = track.items[0];
+      if (!trackDetails) {
+        return;
+      }
 
       return {
-        id: trackLocation.id.videoId,
-        track: trackLocation.snippet.title,
-        description: trackLocation.snippet.description
+        id: trackDetails.id.videoId || null,
+        track: trackDetails.snippet.title || null,
+        description: trackDetails.snippet.description || null
       };
 
     })
