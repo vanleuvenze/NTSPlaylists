@@ -1,20 +1,22 @@
 
 
-module.exports.getArtistAndTitle = function (songInfo) {
+var getArtistAndTitle = function (songInfo) {
   var separateArtistFromTitle;
   var successfulSeparation = true;
 
-  if (songInfo.track.indexOf('-') !== -1) {
+  if (!songInfo) return;
 
-    separateArtistFromTitle = songInfo.track.split('-');
+  if (songInfo.indexOf('-') !== -1) {
 
-  } else if (songInfo.track.indexOf('–') !== -1) {
+    separateArtistFromTitle = songInfo.split('-');
 
-    separateArtistFromTitle = songInfo.track.split('–');
+  } else if (songInfo.indexOf('–') !== -1) {
+
+    separateArtistFromTitle = songInfo.split('–');
 
   } else {
 
-    separateArtistFromTitle = songInfo.track;
+    separateArtistFromTitle = songInfo;
     successfulSeparation = false;
 
   }
@@ -27,5 +29,11 @@ module.exports.getArtistAndTitle = function (songInfo) {
     title: songTitle
   }
   
-}
+};
 
+
+module.exports = {
+
+  getArtistAndTitle : getArtistAndTitle
+
+}

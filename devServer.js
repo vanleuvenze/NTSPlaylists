@@ -20,10 +20,7 @@ app.use(webpackMiddleware(compiler, {
   }));
 
 app.use(function *(next) {
-  yield wbpkHotMiddleware(compiler, {
-    noInfo: true,
-    publicPath: config.output.publicPath
-  }).bind(null, this.req, this.res);
+  yield wbpkHotMiddleware(compiler).bind(null, this.req, this.res);
   yield next;
 });
 

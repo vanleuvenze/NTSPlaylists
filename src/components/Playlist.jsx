@@ -1,28 +1,31 @@
 import React, { Component } from 'react'
 import { CircularProgress, Menu, MenuItem, Divider } from 'material-ui'
-import TrackInfo from './trackInfo.js'
+import PlaylistItem from './PlaylistItem.js'
 import '../../styles/styles.css';
-import h from '../../utils/formatting.js'
 
-const Playlist = ({playlist, select}) => {
+const Playlist = ({
+  playlist, 
+  select
+}) => {
+
   if (playlist === null) {
     return <CircularProgress/>
   }
+
   return (
     <div className='playlist'>
-        <div>
-          {
-            playlist.map(function (songInfo) {
-              if (!songInfo) { return }
-              let artistAndTitle = h.getArtistAndTitle(songInfo);
-              return (
-                <div>
-                  <TrackInfo artistAndTitle={artistAndTitle} className = 'playlistItem' select={() => select(songInfo.id)}/>
-                  <Divider/>
-                </div>
-              )
-            })
-          }
+      <div>
+        {
+          playlist.map(function (songInfo) {
+            if (!songInfo) { return }
+            return (
+              <div>
+                <PlaylistItem className='playlistItem' artist={songInfo.artist} title={songInfo.title} select={() => select(songInfo)}/>
+                <Divider/>
+              </div>
+            )
+          })
+        }
       </div>
     </div>
   )

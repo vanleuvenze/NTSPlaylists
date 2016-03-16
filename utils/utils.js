@@ -1,6 +1,7 @@
 var cheerio = require('cheerio');
 var Q = require('q')
 var youTube_key = require('../config/API_KEYS').YOUTUBE_API_KEY;
+var fmt = require('./formatting');
 
 
 /*
@@ -123,18 +124,19 @@ var formatPlaylistData = function (url) {
 
   return createPlaylistPromiseArray(url)
   .then(function (playlist) {
-    console.log(playlist)
     return playlist.map(function (track) {
       var trackDetails = track.items[0];
 
       if (!trackDetails) {
         return;
       }
+      var artistAndTitle = fmt.getArtistAndTitle(trackDetails.snippet.title);
 
       return {
-        id: trackDetails.id.videoId || null,
-        track: trackDetails.snippet.title || null,
-        description: trackDetails.snippet.description || null
+        id: trackDetails.id.videoId || '',
+        artist: artistAndTitle.artist || '',
+        title: artistAndTitle.title || '',
+        description: trackDetails.snippet.description || ''
       };
 
     })

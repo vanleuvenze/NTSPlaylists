@@ -15,7 +15,9 @@ export default class App extends Component {
     super()
     this.state = {
       playlist: null,
-      nowPlaying: null
+      nowPlayingURL: null,
+      nowPlayingArtist: null,
+      youtubeDescription: null
     }
     this.select = this.select.bind(this);
     this.searchInput = this.searchInput.bind(this);
@@ -27,47 +29,64 @@ export default class App extends Component {
    formatPlaylistData()
    .then(function (playlist) {
 
-      var firstId = playlist[0].id;
+      let firstId = playlist[0].id;
+      let firstDescription = playlist[0].description;
+      let firstArtist = playlist[0].artist
+      console.log('from app', playlist);
 
       this.setState({
-        playlist : playlist,
-        nowPlaying : "https://www.youtube.com/embed/" + firstId
+        playlist: playlist,
+        nowPlayingURL: "https://www.youtube.com/embed/" + firstId,
+        nowPlayingArtist: firstArtist,
+        youtubeDescription: firstDescription
       })
    }.bind(this));
 
   }
 
 
-  select (videoId) {
+  select (songInfo) {
+    let id = songInfo.id;
+    let description = songInfo.description;
+    let artist = songInfo.artist;
+
+    console.log('selecting ', songInfo)
+
     this.setState({
-      nowPlaying : "https://www.youtube.com/embed/" + videoId
-    }) 
+      nowPlayingURL: "https://www.youtube.com/embed/" + id,
+      nowPlayingArtist: artist,
+      youtubeDescription: description
+    });
   }
 
 
   searchInput (ntsUrl) {
+
     formatPlaylistData(ntsUrl)
     .then(function (playlist) {
 
-      var firstId = playlist[0].id;
+      let firstId = playlist[0].id;
+      let description = playlist[0].description;
 
       this.setState({
         playlist: playlist,
-        nowPlaying: "https://www.youtube.com/embed/" + firstId
+        nowPlayingArtist: "https://www.youtube.com/embed/" + firstId,
+        youtubeDescription: description
       })
 
     }.bind(this));
+
   }
 
 
   render () {
-    console.log('playlist in App:', this.state.playlist);
+
     return (
       <div className='container'>
         <Header/>
         <Search search={this.searchInput}/>
         <div className='container-flex'>
-          <NowPlaying nowPlaying={this.state.nowPlaying}/>
+          <NowPlaying youtubeInfo={this.state}/>
           <Playlist select={this.select} playlist={this.state.playlist}/>
         </div>
       </div>

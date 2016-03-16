@@ -37,6 +37,7 @@
 now-playing styles apply to the components that make up the first
 column contained in .container-flex
 */
+
 .now-playing {
   width: 100%;
   height: 300px;
@@ -51,10 +52,32 @@ column contained in .container-flex
 }
 
 .now-playing-main {
-  width: 350px;
+  width: 390px;
   height: 250px;
-  margin-top: 10px
+  margin: 10px 10px 0 0;
 }
+
+.description {
+  width: 400px;
+  height: 250px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.description div {
+  font-family: 'Open Sans';
+  font-size: 30px;
+}
+
+.description:hover {
+  color: red;
+  border: solid 2px black;
+  border-radius: 2px;
+}
+
 
 /*
 playslist styles apply to the components that make up the second
@@ -74,7 +97,7 @@ column contained in .container-flex
   border-bottom: 1px solid black;
 }
 
-.trackInfo {
+.playlistItemInfo {
   width: 100%;
   height: 150px;
 }
