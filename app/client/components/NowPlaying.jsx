@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import Description from './Description.jsx'
-import '../../styles/styles.css'
-import { getDiscogsArtistInformation } from '../../utils/discogsAPI.js'
-import { chooseDescription } from '../../utils/helpers.js'
+import '../../public/styles/styles.css'
+import { getDiscogsArtistInformation } from '../utils/discogsAPI.js'
+import { chooseDescription } from '../utils/helpers.js'
 
 /*
 

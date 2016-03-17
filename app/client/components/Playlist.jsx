@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { CircularProgress, Menu, MenuItem, Divider } from 'material-ui'
-import PlaylistItem from './PlaylistItem.js'
-import '../../styles/styles.css';
+import PlaylistItem from './PlaylistItem.jsx'
+import '../../public/styles/styles.css';
 
 const Playlist = ({
   playlist, 

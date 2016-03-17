@@ -4,7 +4,7 @@ var send = require('koa-send');
 
 var webpack = require('webpack');
 var wbpkHotMiddleware = require('webpack-hot-middleware')
-var config = require('./webpack.config.dev.js');
+var config = require('../../webpack.config.dev.js');
 var compiler = webpack(config);
 var webpackMiddleware = require('koa-webpack-dev-middleware');
 
@@ -27,7 +27,7 @@ app.use(function *(next) {
 
 //ROUTES
 router.get('*', function *(){
-  yield send(this, 'index.html');
+  yield send(this, 'public/index.html');
 });
 
 

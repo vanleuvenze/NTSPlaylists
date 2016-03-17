@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
-import { formatPlaylistData } from '../utils/utils.js'
+import { formatPlaylistData } from './utils/utils.js'
 import { CircularProgress } from 'material-ui'
 import Header from './components/Header.jsx'
 import Search from './components/Search.jsx'
 import NowPlaying from './components/NowPlaying.jsx'
 import Playlist from './components/Playlist.jsx'
+import store from './store.js'
 import Q from 'q'
 
-import '../styles/styles.css';
+import '../public/styles/styles.css'
 
 
 export default class App extends Component {
@@ -25,6 +26,8 @@ export default class App extends Component {
 
 
   componentWillMount () {
+
+    console.log('this is our redux store', store.getState())
 
    formatPlaylistData()
    .then(function (playlist) {
