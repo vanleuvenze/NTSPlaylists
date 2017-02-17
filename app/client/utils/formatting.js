@@ -20,7 +20,7 @@ var getArtistAndTitle = function (songInfo) {
     successfulSeparation = false;
 
   }
-  
+
   var artist = successfulSeparation ? separateArtistFromTitle[0] : separateArtistFromTitle;
   var songTitle = successfulSeparation ? separateArtistFromTitle[1] : '';
 
@@ -28,7 +28,7 @@ var getArtistAndTitle = function (songInfo) {
     artist: artist,
     title: songTitle
   }
-  
+
 };
 
 

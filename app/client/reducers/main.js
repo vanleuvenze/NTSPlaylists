@@ -22,7 +22,7 @@ const MainReducer = (state = initialState, action) => {
     case 'testing':
       console.log('just testing');
 
-    default: 
+    default:
       return state;
   }
 }

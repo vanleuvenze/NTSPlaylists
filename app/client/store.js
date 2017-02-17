@@ -8,7 +8,7 @@ import MainReducer from './reducers/main.js'
 
 const store = createStore(
   combineReducers({
-  MainReducer, 
+  MainReducer,
   routing: routerReducer})
 )
 

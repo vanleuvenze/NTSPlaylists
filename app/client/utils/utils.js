@@ -1,52 +1,51 @@
 var cheerio = require('cheerio');
 var Q = require('q')
 var youTube_key = require('../config/API_KEYS').YOUTUBE_API_KEY;
-var fmt = require('./formatting');
+// var format = require('./formatting');
+import format from './formatting'
 
 
 /*
 
 getNTSTracklist
-takes a url from an NTS page and scrapes it for the 
+takes a url from an NTS page and scrapes it for the
 tracklist information
 
 */
 
 var getNTSTracklist = function (url) {
 
-  url = url || "http://www.nts.live/shows/the-do-you-breakfast-show/episodes/do-you-breakfast-w-charlie-bones-nosedrip-3rd-march-2016"
-  
+  url = url || 'http://www.nts.live/shows/the-do-you-breakfast-show/episodes/the-do-you-breakfast-show-w-charlie-bones-15th-february-2017'
+
   return fetch(url)
-  .then(function (res) {
-    return res.text();
-  })
-  .then(function (html) {
-    //load our html
-    var $ = cheerio.load(html);
+    .then(function (res) {
+      return res.text();
+    })
+    .then(function (html) {
+      //load our html
+      var $ = cheerio.load(html);
 
-    //get our tracklist
-    var listings = $('.tracks').find('li');
+      //get our tracklist
+      var listings = $('.tracks').find('li');
 
-    //pull out the individual tracks
-    var tracks = listings.map(function () {
-      return $(this).text();
-    }).get();
+      //pull out the individual tracks
+      var tracks = listings.map(function () {
+        return $(this).text();
+      }).get();
 
-    return tracks;
-
-  })
-  .catch(function (err) {
-    console.log('Error', err);
-  })
-  
+      return tracks;
+    })
+    .catch(function (err) {
+      console.log('Error', err);
+    })
 }
 
 
 /*
 
-getVideosFromYoutube 
-takes a single trackname, makes a request to 
-the youtube API for that information, and returns a promise. 
+getVideosFromYoutube
+takes a single trackname, makes a request to
+the youtube API for that information, returns a promise.
 
 */
 
@@ -71,22 +70,18 @@ var getVideoFromYoutube = function (track) {
 
 getPlaylist
 uses getNTSTracklist and getVideoFromYoutube to create and return an array
-of promises - this array of promises is used in following function, 
+of promises - this array of promises is used in following function,
 getUsablePlaylistData, along with Q.all, to return a resolved array of our
 playlist objects.
 
 */
 
 var getPlaylist = function (url) {
-
   return getNTSTracklist(url)
-  .then(function (tracks) {
-
-    return tracks.map(function (track) {
-
-      return getVideoFromYoutube(track);
-
-    }) 
+    .then(function (tracks) {
+      return tracks.map(function (track) {
+        return getVideoFromYoutube(track);
+    })
   })
 
 }
@@ -95,7 +90,7 @@ var getPlaylist = function (url) {
 /*
 
 createPlaylistPromiseArray
-uses the array of promises returned by getPlaylist, resolves them all, 
+uses the array of promises returned by getPlaylist, resolves them all,
 and returns a promise.
 
 */
@@ -103,8 +98,8 @@ and returns a promise.
 var createPlaylistPromiseArray = function (url) {
 
   return getPlaylist(url)
-  .then(function (playlist) {
-    return Q.all(playlist);
+    .then(function (playlist) {
+      return Q.all(playlist);
   })
 
 }
@@ -123,24 +118,25 @@ OBJECT, TWEAK HERE
 var formatPlaylistData = function (url) {
 
   return createPlaylistPromiseArray(url)
-  .then(function (playlist) {
-    return playlist.map(function (track) {
-      var trackDetails = track.items[0];
+    .then(function (playlist) {
+      return playlist.map(function (track) {
+        console.log(playlist, track)
+        var trackDetails = track ? track.items[0] : undefined;
 
-      if (!trackDetails) {
-        return;
-      }
-      var artistAndTitle = fmt.getArtistAndTitle(trackDetails.snippet.title);
+        if (!trackDetails) {
+          return;
+        }
+        var artistAndTitle = format.getArtistAndTitle(trackDetails.snippet.title);
 
-      return {
-        id: trackDetails.id.videoId || '',
-        artist: artistAndTitle.artist || '',
-        title: artistAndTitle.title || '',
-        description: trackDetails.snippet.description || ''
-      };
+        return {
+          id: trackDetails.id.videoId || '',
+          artist: artistAndTitle.artist || '',
+          title: artistAndTitle.title || '',
+          description: trackDetails.snippet.description || ''
+        };
 
+      })
     })
-  })
 
 }
 
@@ -149,7 +145,7 @@ var formatPlaylistData = function (url) {
 module.exports = {
 
   formatPlaylistData : formatPlaylistData
-  
+
 }
 
 

@@ -30,8 +30,6 @@ router.get('*', function *(){
   yield send(this, 'public/index.html');
 });
 
-
-
 //setting up koa routing
 app.use(router.routes());
 app.use(router.allowedMethods());
