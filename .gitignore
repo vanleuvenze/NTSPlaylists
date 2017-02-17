@@ -1,3 +1,4 @@
 node_modules
 app/client/config/API_KEYS.js*
+.DS_Store
 TODO
