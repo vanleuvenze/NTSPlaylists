@@ -10,9 +10,9 @@ var compiler = webpack(config);
 var webpackMiddleware = require('koa-webpack-dev-middleware');
 
 var app = koa();
-console.log('public path in dev server', config.output.publicPath)
+
 var ROOT_PATH = path.resolve(__dirname);
-console.log(ROOT_PATH)
+
 
 //MIDDLEWARE
 

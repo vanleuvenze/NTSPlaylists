@@ -1,8 +1,5 @@
-import React, { Component } from 'react'
-import { Route, IndexRoute } from 'react-router'
+import React, { Component } from 'react';
+import { Route, IndexRoute } from 'react-router';
+import NTSPlaylist from './app.js';
 
-import NTSPlaylist from './app.js'
-
-export default <Route path='/' component={NTSPlaylist}/>
-
-
+export default (<Route path='/' component={NTSPlaylist}/>);

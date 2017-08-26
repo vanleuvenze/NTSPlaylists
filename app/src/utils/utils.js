@@ -12,33 +12,25 @@ tracklist information
 
 */
 
-var getNTSTracklist = function (url) {
-
-  url = url || 'http://www.nts.live/shows/the-do-you-breakfast-show/episodes/the-do-you-breakfast-show-w-charlie-bones-15th-february-2017'
+function getNTSTracklist(url) {
+  console.log('calling');
+  url = url || 'http://www.nts.live/shows/guests/episodes/rush-hour-presents-hunee-31st-january-2015'
 
   return fetch(url)
-    .then(function (res) {
-      return res.text();
-    })
-    .then(function (html) {
+    .then(res => res.text())
+    .then(html => {
       //load our html
-      var $ = cheerio.load(html);
+      const $ = cheerio.load(html);
 
       //get our tracklist
-      var listings = $('.tracks').find('li');
+      const tracks = $('.tracks').find('li').map((index, listing) => $(listing).text()).get();
 
-      //pull out the individual tracks
-      var tracks = listings.map(function () {
-        return $(this).text();
-      }).get();
+      console.log('these are our tracks', tracks);
 
       return tracks;
     })
-    .catch(function (err) {
-      console.log('Error', err);
-    })
+    .catch(err => console.log('Error', err));
 }
-
 
 /*
 
@@ -48,22 +40,30 @@ the youtube API for that information, returns a promise.
 
 */
 
-var getVideoFromYoutube = function (track) {
-  var youtubeURL = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + track + "&maxResults=1&key=" + YOUTUBE_API_KEY;
+function getVideoFromYoutube (track) {
+  // TODO: make this a separate function
+  const youtubeURL = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${track}&maxResults=1&key=${YOUTUBE_API_KEY}`;
 
   return fetch(youtubeURL)
-  .then(function (response) {
-    return response.text();
-  })
-  .then(function (track) {
-    return JSON.parse(track);
-  })
-  .catch(function (err) {
-    console.log('Error', err);
-  })
-
+  .then(response => response.text())
+  .then(track => JSON.parse(track))
+  .catch(err => console.log('Error', err));
 }
 
+
+// TODO see if there is way to get these in batches instead of making a separate request for each video
+// function getVideosFromYoutube (tracks) {
+//   // TODO: make this a separate function
+//   const youtubeURL = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${tracks.join('|')}&maxResults=1&key=${YOUTUBE_API_KEY}`;
+
+//   return fetch(youtubeURL)
+//   .then(response => response.text())
+//   .then(track => {
+//     console.log('OYEEE', JSON.parse(track))
+//     return JSON.parse(track)
+//   })
+//   .catch(err => console.log('Error', err));
+// }
 
 /*
 
@@ -75,14 +75,8 @@ playlist objects.
 
 */
 
-var getPlaylist = function (url) {
-  return getNTSTracklist(url)
-    .then(function (tracks) {
-      return tracks.map(function (track) {
-        return getVideoFromYoutube(track);
-    })
-  })
-
+function getPlaylist (url) {
+  return getNTSTracklist(url).then(tracks => tracks.map(track => getVideoFromYoutube(track)));
 }
 
 
@@ -94,13 +88,8 @@ and returns a promise.
 
 */
 
-var createPlaylistPromiseArray = function (url) {
-
-  return getPlaylist(url)
-    .then(function (playlist) {
-      return Q.all(playlist);
-  })
-
+function createPlaylistPromiseArray (url) {
+  return getPlaylist(url).then(playlist => Q.all(playlist));
 }
 
 
@@ -117,14 +106,13 @@ OBJECT, TWEAK HERE
 export function getPlaylistData(url) {
   return createPlaylistPromiseArray(url)
     .then(playlist => {
-      return playlist.map(function (track) {
-        console.log(playlist, track)
-        var trackDetails = track ? track.items[0] : undefined;
+      return playlist.map(track => {
+        const trackDetails = track ? track.items[0] : undefined;
 
         if (!trackDetails) {
           return;
         }
-        var artistAndTitle = getArtistAndTitle(trackDetails.snippet.title);
+        const artistAndTitle = getArtistAndTitle(trackDetails.snippet.title);
 
         return {
           id: trackDetails.id.videoId || '',
@@ -136,5 +124,3 @@ export function getPlaylistData(url) {
       })
     })
 }
-
-

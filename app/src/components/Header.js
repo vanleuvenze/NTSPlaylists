@@ -1,8 +1,5 @@
-import React, { Component } from 'react'
-import '../styles/styles.css'
+import React, { Component } from 'react';
 
-const Header = () => (
-  <div className='header'>NTS Playlist</div>
-)
+const Header = () => <div>NTS Playlist</div>;
 
-export default Header
+export default Header;

@@ -1,20 +1,19 @@
-import React, { Component } from 'react'
-import { formatPlaylistData } from './utils/utils.js'
-import { CircularProgress } from 'material-ui'
-import Header from './components/Header.js'
-import Search from './components/Search.js'
+import React, { Component } from 'react';
 
-import Playlist from './components/Playlist.js'
-import NowPlaying from './components/NowPlaying.js'
+import Header from './components/Header';
+import Search from './components/Search';
+import Playlist from './components/Playlist';
+import NowPlaying from './components/NowPlaying';
 
-import { getPlaylistData } from './utils/utils.js'
-import { getDiscogsArtistInformation } from './utils/discogsAPI.js'
+import { getPlaylistData } from './utils/utils';
+import { getDiscogsArtistInformation } from './utils/discogsAPI';
 
-import './styles/styles.css'
+import styles from './styles/styles.css';
 
 class NTSPlaylist extends Component {
-  constructor () {
-    super()
+  constructor (props) {
+    super(props);
+
     this.state = {
       description: {},
       loading: false,
@@ -35,8 +34,8 @@ class NTSPlaylist extends Component {
       .then(playlist => {
         const firstId = playlist[0].id;
         const firstDescription = playlist[0].description;
-        const firstArtist = playlist[0].artist
-        console.log('got the playlist', playlist)
+        const firstArtist = playlist[0].artist;
+
         this.setState({
           description: {artist: firstArtist, details: firstDescription},
           loading: false,
@@ -76,11 +75,12 @@ class NTSPlaylist extends Component {
         })
       });
   }
+
   render() {
     return (
-      <div className='container'>
+      <div className={styles.container}>
         <Header/>
-        <div className='container-flex'>
+        <div>
           <NowPlaying description={this.state.description} nowPlayingUrl={this.state.nowPlayingUrl}/>
           <Playlist playlist={this.state.playlist} select={this.select}/>
         </div>
@@ -89,4 +89,4 @@ class NTSPlaylist extends Component {
   }
 }
 
-export default NTSPlaylist
+export default NTSPlaylist;

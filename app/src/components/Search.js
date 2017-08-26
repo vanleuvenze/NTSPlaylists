@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 export default class Search extends Component {
   constructor(props) {
@@ -10,16 +10,17 @@ export default class Search extends Component {
     if (e.keyCode === 13) {
       let url = e.target.value;
       this.props.search(url);
-      e.target.value = ''
-    }
 
+      // TODO: this is mutative - do something reset the value some other way.....
+      e.target.value = '';
+    }
   }
 
   render() {
     return (
-      <div className='search'>
-        <input onKeyUp={(e) => this.submit(e)} className='searchInput' placeholder='NTS show url goes here' type="text"/>
+      <div>
+        <input onKeyUp={(e) => this.submit(e)} placeholder='NTS show url goes here' type="text"/>
       </div>
-    )
+    );
   }
 }
