@@ -17,7 +17,11 @@ function formatDiscogsRequestURL(artist) {
 function getRateLimitInfo(response) {
   return response
     && response.headers
-    && {limit: response.headers['x-discogs-ratelimit'], used: response.headers['x-discogs-ratelimit-used'], remaining: response.headers['x-discogs-ratelimit-remaining']}
+    && {
+         limit: response.headers['x-discogs-ratelimit'],
+         used: response.headers['x-discogs-ratelimit-used'],
+         remaining: response.headers['x-discogs-ratelimit-remaining']
+       };
 }
 
 function findResourceUrl(response) {
@@ -31,7 +35,7 @@ function findResourceUrl(response) {
 }
 
 function formatResourceUrl(url) {
-  return `${url}?key=${DISCOGS_KEY}&secret=${DISCOGS_SECRET}`
+  return `${url}?key=${DISCOGS_KEY}&secret=${DISCOGS_SECRET}`;
 }
 
 function getArtist(resource_url) {
@@ -43,7 +47,7 @@ function getArtist(resource_url) {
 
       return res.body;
     })
-    .catch(err => Promise.reject({source: 'getArtist', error: err}))
+    .catch(err => Promise.reject({source: 'getArtist', error: err}));
 }
 
 function getResourceUrl(artist='george benson') {
@@ -55,7 +59,7 @@ function getResourceUrl(artist='george benson') {
 function searchDiscogsForArtist(artist) {
   return getResourceUrl(artist)
     .then(resource_url => getArtist(resource_url))
-    .catch(err => Promise.reject(err))
+    .catch(err => Promise.reject(err));
 }
 
 // searchDiscogsForArtist(artist)

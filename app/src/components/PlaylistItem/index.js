@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styles from './playlist_item_styles.css';
 
 const collapsedContent = ({artist, title}) => [
@@ -25,14 +25,13 @@ const fullContent = ({artist, description, id, title}) => {
 
 
 const PlaylistItem = ({songInfo, select, selected}) => {
-if (selected) console.log('I AM SELECTED!', songInfo);
+	if (selected) console.log('I AM SELECTED!', songInfo);
 
-return (
-  <li className={`${styles.item} ${selected ? styles.selected : styles.default}`} onClick={select}>
-  	{selected ? fullContent(songInfo) : collapsedContent(songInfo)}
-  </li>
-);
-}
-
+	return (
+		<li className={`${styles.item} ${selected ? styles.selected : styles.default}`} onClick={select}>
+			{selected ? fullContent(songInfo) : collapsedContent(songInfo)}
+		</li>
+	);
+};
 
 export default PlaylistItem;

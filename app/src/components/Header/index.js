@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Search from '../Search';
-import styles from './styles';
+import styles from './header_styles.css';
 
 const Header = ({search, ntsPlaylistUrl, ntsShowUrlError}) => (
 	<div className={styles.container}>

@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 
 import Header from './components/Header';
 import Playlist from './components/Playlist';
-import NowPlaying from './components/NowPlaying';
 
 import {validateNTSShowURL} from './helpers';
 import {getPlaylistData} from '../requests/youtube';
@@ -20,7 +19,7 @@ class NTSPlaylist extends Component {
       ntsShowUrlError: '',
       playlist: null,
       selected: 0
-    }
+    };
 
     this.getDescription = this.getDescription.bind(this);
     this.select = this.select.bind(this);
@@ -34,7 +33,7 @@ class NTSPlaylist extends Component {
 
     getPlaylistData()
       .then(playlist => {
-        this.setState({loading: false, playlist})
+        this.setState({loading: false, playlist});
     });
   }
 
@@ -50,17 +49,14 @@ class NTSPlaylist extends Component {
   validateAndSearch(showUrl) {
     const {validUrl, error} = validateNTSShowURL(showUrl);
 
-    error ? this.setState({ntsShowUrlError: error}) : this.getPlaylist(showUrl);
+    error ? this.setState({ntsShowUrlError: error}) : this.getPlaylist(validUrl);
 
   }
 
   getPlaylist(showUrl) {
     getPlaylistData(showUrl)
       .then(playlist => {
-        this.setState({
-          playlist: playlist,
-          ntsShowUrlError: null
-        })
+        this.setState({playlist: playlist, ntsShowUrlError: null});
       });
   }
 

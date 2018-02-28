@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PlaylistItem from '../PlaylistItem';
-import styles from './styles.css';
+import styles from './playlist_styles.css';
 
 const Playlist = ({ playlist, select, selected}) => {
   if (!playlist) return (<div>LOADING...</div>);
@@ -18,7 +18,7 @@ const Playlist = ({ playlist, select, selected}) => {
         )}
       </ul>
     </div>
-);
-}
+  );
+};
 
 export default Playlist;

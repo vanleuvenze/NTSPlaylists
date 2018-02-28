@@ -1,14 +1,13 @@
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
 
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-var ROOT_PATH = path.resolve(__dirname);
+const ROOT_PATH = path.resolve(__dirname);
 
 //TODO ignore API keys in config
 module.exports = {
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'cheap-module-eval-source-map', // this makes the bundle huge.
   entry: [
     path.resolve(ROOT_PATH, '../app/src/index')
   ],

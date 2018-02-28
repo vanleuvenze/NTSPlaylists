@@ -49,5 +49,5 @@ export function getPlaylistData(url) {
   return getVideosFromYoutube(url)
     .then(playlist => playlist.map(track => (
       track && track.items[0] ? formatTrackDetails(track.items[0]) : null
-    )))
+    )));
 }

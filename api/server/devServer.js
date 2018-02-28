@@ -1,4 +1,3 @@
-const path = require('path');
 const Koa = require('koa');
 const router = require('koa-router')();
 const send = require('koa-send');
@@ -11,10 +10,6 @@ const compiler = webpack(config);
 const webpackMiddleware = require('koa-webpack');
 
 const app = new Koa();
-
-const STATIC_FILES_PATH = path.resolve(__dirname, '../../app/build/');
-
-
 
 //setting up webpack dev environment
 app.use(logger());

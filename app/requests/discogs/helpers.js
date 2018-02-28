@@ -1,11 +1,11 @@
 export function chooseDescription(backup, discogsInfo) {
 
-  var name = backup.youtubeInfo.nowPlayingArtist;
-  var aliases = discogsInfo.aliases || '';
-  var profile = discogsInfo.profile || backup.youtubeInfo.youtubeDescription;
-  var groups = discogsInfo.groups || '';
-  var urls = discogsInfo.groups || '';
-  var images = discogsInfo.images || '';
+  const name = backup.youtubeInfo.nowPlayingArtist;
+  const aliases = discogsInfo.aliases || '';
+  const profile = discogsInfo.profile || backup.youtubeInfo.youtubeDescription;
+  const groups = discogsInfo.groups || '';
+  const urls = discogsInfo.groups || '';
+  const images = discogsInfo.images || '';
 
   return {
     name: name,
@@ -14,5 +14,5 @@ export function chooseDescription(backup, discogsInfo) {
     groups: groups,
     urls: urls,
     images: images
-  }
+  };
 }
