@@ -69,13 +69,12 @@ class NTSPlaylist extends Component {
       <div className={styles.container}>
 
         <div className={styles.contentWrapper}>
-               <Header
-          search={this.validateAndSearch}
-          ntsPlaylistUrl={this.state.ntsPlaylistUrl}
-          ntsShowUrlError={this.state.ntsShowUrlError}
-          />
+          <Header
+            search={this.validateAndSearch}
+            ntsPlaylistUrl={this.state.ntsPlaylistUrl}
+            ntsShowUrlError={this.state.ntsShowUrlError}
+            />
           <div className={styles.content}>
-
             <div>
               <Playlist playlist={this.state.playlist} select={this.select} selected={this.state.selected}/>
             </div>
