@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import Header from './components/Header';
-import Search from './components/Search';
 import Playlist from './components/Playlist';
 import NowPlaying from './components/NowPlaying';
 
-import { getPlaylistData } from './utils/utils';
-import { getDiscogsArtistInformation } from './utils/discogsAPI';
+import {validateNTSShowURL} from './helpers';
+import {getPlaylistData} from '../requests/youtube';
 
 import styles from './styles/styles.css';
 
@@ -17,13 +16,16 @@ class NTSPlaylist extends Component {
     this.state = {
       description: {},
       loading: false,
-      nowPlayingUrl: null,
-      playlist: null
+      ntsShowUrl: '',
+      ntsShowUrlError: '',
+      playlist: null,
+      selected: 0
     }
 
     this.getDescription = this.getDescription.bind(this);
     this.select = this.select.bind(this);
-    this.searchInput = this.searchInput.bind(this);
+    this.validateAndSearch = this.validateAndSearch.bind(this);
+    this.getPlaylist = this.getPlaylist.bind(this);
   }
 
 
@@ -32,16 +34,7 @@ class NTSPlaylist extends Component {
 
     getPlaylistData()
       .then(playlist => {
-        const firstId = playlist[0].id;
-        const firstDescription = playlist[0].description;
-        const firstArtist = playlist[0].artist;
-
-        this.setState({
-          description: {artist: firstArtist, details: firstDescription},
-          loading: false,
-          nowPlayingUrl: "https://www.youtube.com/embed/" + firstId,
-          playlist,
-        })
+        this.setState({loading: false, playlist})
     });
   }
 
@@ -50,28 +43,23 @@ class NTSPlaylist extends Component {
   }
 
 
-  select (songInfo) {
-    const id = songInfo.id;
-    const description = songInfo.description; // this is from youtube
-    const artist = songInfo.artist;
-
-    this.setState({
-      nowPlayingUrl: "https://www.youtube.com/embed/" + id,
-      description: {artist, details: description}
-    });
+  select(index) {
+    this.setState({selected: index});
   }
 
+  validateAndSearch(showUrl) {
+    const {validUrl, error} = validateNTSShowURL(showUrl);
 
-  searchInput (ntsUrl) {
-    getPlaylistData(ntsUrl)
+    error ? this.setState({ntsShowUrlError: error}) : this.getPlaylist(showUrl);
+
+  }
+
+  getPlaylist(showUrl) {
+    getPlaylistData(showUrl)
       .then(playlist => {
-        const firstId = playlist[0].id;
-        const description = playlist[0].description;
-
         this.setState({
           playlist: playlist,
-          nowPlayingUrl: "https://www.youtube.com/embed/" + firstId,
-          youtubeDescription: description
+          ntsShowUrlError: null
         })
       });
   }
@@ -79,10 +67,19 @@ class NTSPlaylist extends Component {
   render() {
     return (
       <div className={styles.container}>
-        <Header/>
-        <div>
-          <NowPlaying description={this.state.description} nowPlayingUrl={this.state.nowPlayingUrl}/>
-          <Playlist playlist={this.state.playlist} select={this.select}/>
+
+        <div className={styles.contentWrapper}>
+               <Header
+          search={this.validateAndSearch}
+          ntsPlaylistUrl={this.state.ntsPlaylistUrl}
+          ntsShowUrlError={this.state.ntsShowUrlError}
+          />
+          <div className={styles.content}>
+
+            <div>
+              <Playlist playlist={this.state.playlist} select={this.select} selected={this.state.selected}/>
+            </div>
+          </div>
         </div>
       </div>
     );

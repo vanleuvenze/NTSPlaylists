@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Description from '../Description';
-import { chooseDescription } from '../../utils/helpers.js';
+// import { chooseDescription } from '../../utils/helpers.js';
 
-import styles from './now_playing_styles.css';
+import styles from './styles.css';
 
 // TODO: make functional component
 export default class NowPlaying extends Component {

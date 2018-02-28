@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-const Description = ({ description }) => {
+const Description = ({description}) => {
   return (
     <div>
       <h3>{description.artist}</h3>

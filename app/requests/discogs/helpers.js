@@ -1,4 +1,4 @@
-var chooseDescription = function (backup, discogsInfo) {
+export function chooseDescription(backup, discogsInfo) {
 
   var name = backup.youtubeInfo.nowPlayingArtist;
   var aliases = discogsInfo.aliases || '';
@@ -15,17 +15,4 @@ var chooseDescription = function (backup, discogsInfo) {
     urls: urls,
     images: images
   }
-
-}
-
-
-
-
-
-
-
-module.exports = {
-
-  chooseDescription: chooseDescription
-
 }

@@ -1,14 +1,38 @@
 import React, { Component } from 'react';
+import styles from './playlist_item_styles.css';
 
-const PlaylistItem = ({
-  artist,
-  title,
-  select
-}) => (
-  <div onClick={select}>
-    <div>{artist.toUpperCase()}</div>
-    <div>{title.toUpperCase()}</div>
-  </div>
+const collapsedContent = ({artist, title}) => [
+	<span key={1}>{artist}</span>,
+  <span key={2}>{title}</span>
+];
+
+const fullContent = ({artist, description, id, title}) => {
+
+	console.log('AYYEEE', artist, description, id, title);
+
+	return (
+		<div className={styles.fullContent}>
+			<div className={styles.video}>
+				<iframe className={styles.iframe} src={`https://www.youtube.com/embed/${id}`} />
+			</div>
+			<div className={styles.contentContainer}>
+				<span>{artist}</span>
+				<div>{description}</div>
+			</div>
+		</div>
+	);
+};
+
+
+const PlaylistItem = ({songInfo, select, selected}) => {
+if (selected) console.log('I AM SELECTED!', songInfo);
+
+return (
+  <li className={`${styles.item} ${selected ? styles.selected : styles.default}`} onClick={select}>
+  	{selected ? fullContent(songInfo) : collapsedContent(songInfo)}
+  </li>
 );
+}
+
 
 export default PlaylistItem;
