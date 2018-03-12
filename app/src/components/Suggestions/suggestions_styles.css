@@ -1,0 +1,13 @@
+.suggestionContainer {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.suggestion{
+	margin: 5px 0px;
+}
+
+.showTitle {
+	font-weight: bold;
+}

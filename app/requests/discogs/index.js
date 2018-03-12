@@ -1,6 +1,8 @@
 const {DISCOGS_KEY, DISCOGS_SECRET} =  require('../../config/API_KEYS.js');
 const request = require('superagent');
 
+// CLEAN THIS UP!!
+
 const errorMap = {
   getArtist: 'ERROR FINDING SINGLE ARTIST IN getArtist',
   getResourceUrl: 'ERROR GETTING RESOURCE URL FROM DISCOGS in getResourceUrl'

@@ -5,6 +5,15 @@ import {YOUTUBE_API_KEY} from '../../../config/API_KEYS';
 import {getNTSTracklist} from '../scraper';
 import {formatTrackDetails} from './helpers';
 
+// const errorMap = {
+//   getVideoFromYoutube: 'ERROR GETTING VIDEO FROM YOUTUBE',
+//   getVideosFromYoutube: 'ERROR RESOLVING YOUTUBE REQUESTS',
+//   getPlaylistData: 'ERROR GETTING PLAYLIST DATA'
+
+// };
+
+// const handleError = ({source, err}) => console.log(`${errorMap[source]} ${err}`);
+
 /*
 
 getVideosFromYoutube
@@ -17,9 +26,9 @@ function getVideoFromYoutube(track) {
   const youtubeURL = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${track}&maxResults=1&key=${YOUTUBE_API_KEY}`;
 
   return fetch(youtubeURL)
-  .then(response => response.text())
-  .then(track => JSON.parse(track))
-  .catch(err => console.log('Error', err));
+    .then(response => response.text())
+    .then(track => JSON.parse(track))
+    .catch(error => Promise.reject({source: 'getVideoFromYoutube', error}));
 }
 
 /*
@@ -31,7 +40,9 @@ and returns a promise.
 */
 
 function getVideosFromYoutube(url) {
-  return getNTSTracklist(url).then(tracks => Q.all(tracks.map(track => getVideoFromYoutube(track))));
+  return getNTSTracklist(url)
+    .then(tracks => Q.all(tracks.map(track => getVideoFromYoutube(track))))
+    .catch(error => Promise.reject({source: 'getVideosFromYoutube', error}));
 }
 
 
@@ -48,6 +59,7 @@ OBJECT, TWEAK HERE
 export function getPlaylistData(url) {
   return getVideosFromYoutube(url)
     .then(playlist => playlist.map(track => (
-      track && track.items[0] ? formatTrackDetails(track.items[0]) : null
-    )));
+      track && track.items && track.items[0] ? formatTrackDetails(track.items[0]) : null
+    )))
+    .catch(error => Promise.reject({source: 'getPlaylistData', error}));
 }

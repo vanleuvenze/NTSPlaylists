@@ -2,26 +2,35 @@ import React, {Component} from 'react';
 
 import Header from './components/Header';
 import Playlist from './components/Playlist';
+import Suggestions from './components/Suggestions';
+
+import Q from 'q';
 
 import {validateNTSShowURL} from './helpers';
 import {getPlaylistData} from '../requests/youtube';
+import {getRecentNTSShows} from '../requests/scraper';
 
 import styles from './styles/styles.css';
+
+function initialize(...functions) {
+  return Q.all(functions.map(f => f()))
+    .then(values => Promise.resolve({suggestions: values[0], playlist: values[1]}))
+    .catch(err => err);
+}
 
 class NTSPlaylist extends Component {
   constructor (props) {
     super(props);
 
     this.state = {
-      description: {},
       loading: false,
       ntsShowUrl: '',
       ntsShowUrlError: '',
-      playlist: null,
+      playlist: [],
+      suggestions: [],
       selected: 0
     };
 
-    this.getDescription = this.getDescription.bind(this);
     this.select = this.select.bind(this);
     this.validateAndSearch = this.validateAndSearch.bind(this);
     this.getPlaylist = this.getPlaylist.bind(this);
@@ -29,18 +38,12 @@ class NTSPlaylist extends Component {
 
 
   componentDidMount () {
-    this.setState({ loading: true });
+    this.setState({loading: true});
 
-    getPlaylistData()
-      .then(playlist => {
-        this.setState({loading: false, playlist});
-    });
+    initialize(getRecentNTSShows, getPlaylistData)
+      .then(values => this.setState({...values, loading: false}))
+      .catch(err => console.log('error initizlizing in componentDidMount', err));
   }
-
-  getDescription(artist, description) {
-    // if the description is good - use that, otherwise try to get from discogs
-  }
-
 
   select(index) {
     this.setState({selected: index});
@@ -63,7 +66,6 @@ class NTSPlaylist extends Component {
   render() {
     return (
       <div className={styles.container}>
-
         <div className={styles.contentWrapper}>
           <Header
             search={this.validateAndSearch}
@@ -71,9 +73,16 @@ class NTSPlaylist extends Component {
             ntsShowUrlError={this.state.ntsShowUrlError}
             />
           <div className={styles.content}>
-            <div>
-              <Playlist playlist={this.state.playlist} select={this.select} selected={this.state.selected}/>
-            </div>
+            <Suggestions suggestions={this.state.suggestions}/>
+            {
+              this.state.loading
+                ? <div>LOADING...</div>
+                : <Playlist
+                    playlist={this.state.playlist}
+                    select={this.select}
+                    selected={this.state.selected}
+                    />
+            }
           </div>
         </div>
       </div>
