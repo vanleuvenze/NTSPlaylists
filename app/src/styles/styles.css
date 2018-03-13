@@ -2,10 +2,6 @@ body {
 	margin: 0;
 }
 
-.container {
-
-}
-
 .contentWrapper {
 	display: flex;
 	flex-direction: column;
@@ -18,3 +14,7 @@ body {
 	 max-width: 500px;
 	 width: 100%;
 }
+
+.suggestionContainer {}
+
+.playlistContainer {}

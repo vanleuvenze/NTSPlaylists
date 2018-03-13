@@ -28,6 +28,7 @@ class NTSPlaylist extends Component {
       ntsShowUrlError: '',
       playlist: [],
       suggestions: [],
+      showSuggestions: false,
       selected: 0
     };
 
@@ -53,7 +54,6 @@ class NTSPlaylist extends Component {
     const {validUrl, error} = validateNTSShowURL(showUrl);
 
     error ? this.setState({ntsShowUrlError: error}) : this.getPlaylist(validUrl);
-
   }
 
   getPlaylist(showUrl) {
@@ -73,16 +73,24 @@ class NTSPlaylist extends Component {
             ntsShowUrlError={this.state.ntsShowUrlError}
             />
           <div className={styles.content}>
-            <Suggestions suggestions={this.state.suggestions}/>
-            {
-              this.state.loading
-                ? <div>LOADING...</div>
-                : <Playlist
-                    playlist={this.state.playlist}
-                    select={this.select}
-                    selected={this.state.selected}
-                    />
-            }
+            <div className={styles.suggestionContainer}>
+              <Suggestions
+                suggestions={this.state.suggestions}
+                show={this.state.showSuggestions}
+                toggle={() => this.setState({showSuggestions: !this.state.showSuggestions})}
+                />
+            </div>
+            <div className={styles.playlistContainer}>
+              {
+                this.state.loading
+                  ? <div>LOADING...</div>
+                  : <Playlist
+                      playlist={this.state.playlist}
+                      select={this.select}
+                      selected={this.state.selected}
+                      />
+              }
+            </div>
           </div>
         </div>
       </div>

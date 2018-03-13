@@ -7,13 +7,13 @@ const collapsedContent = ({artist, title}) => [
 ];
 
 const fullContent = ({artist, description, id, title}) => {
-
-	console.log('AYYEEE', artist, description, id, title);
-
 	return (
 		<div className={styles.fullContent}>
 			<div className={styles.video}>
-				<iframe className={styles.iframe} src={`https://www.youtube.com/embed/${id}`} />
+				<iframe
+					className={styles.iframe}
+					src={`https://www.youtube.com/embed/${id}`}
+					/>
 			</div>
 			<div className={styles.contentContainer}>
 				<span>{artist}</span>
@@ -25,8 +25,6 @@ const fullContent = ({artist, description, id, title}) => {
 
 
 const PlaylistItem = ({songInfo, select, selected}) => {
-	if (selected) console.log('I AM SELECTED!', songInfo);
-
 	return (
 		<li className={`${styles.item} ${selected ? styles.selected : styles.default}`} onClick={select}>
 			{selected ? fullContent(songInfo) : collapsedContent(songInfo)}
