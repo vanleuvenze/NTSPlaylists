@@ -7,8 +7,9 @@ const Search = ({search, value}) => (
 		<input
 			className={styles.input}
 			onKeyUp={e => e.keyCode === 13 && search(e.target.value)}
-			placeholder='eg. http://www.nts.live/shows/show/episodes/episode'
-			type="text"
+			placeholder={'eg. http://www.nts.live/shows/show/episodes/episode'}
+			value={value}
+			type={'text'}
 		/>
 	</div>
 );

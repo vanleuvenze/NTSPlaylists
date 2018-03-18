@@ -1,4 +1,9 @@
+.container {
+	margin-bottom: 10px;
+}
+
 .containerHide {
+	composes: container;
 	max-height: 20px;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -7,9 +12,17 @@
 }
 
 .containerShow {
+	composes: container;
 	max-height: 1000px;
 	transition: .5s;
-	padding: 12px 0px;
+}
+
+.toggle {
+	font: 400 11px system-ui;
+}
+
+.toggle:hover {
+	cursor: pointer;
 }
 
 .list {
@@ -18,8 +31,12 @@
 	padding: 0px;
 }
 
-.suggestion{
-	padding: 5px 0px
+.suggestion {
+	padding: 5px 0px;
+}
+
+.suggestion:hover {
+	cursor: pointer;
 }
 
 .showTitle {

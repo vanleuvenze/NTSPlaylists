@@ -4,63 +4,56 @@ import Header from './components/Header';
 import Playlist from './components/Playlist';
 import Suggestions from './components/Suggestions';
 
-import Q from 'q';
-
 import {validateNTSShowURL} from './helpers';
 import {getPlaylistData} from '../requests/youtube';
 import {getRecentNTSShows} from '../requests/scraper';
 
 import styles from './styles/styles.css';
 
-function initialize(...functions) {
-  return Q.all(functions.map(f => f()))
-    .then(values => Promise.resolve({suggestions: values[0], playlist: values[1]}))
-    .catch(err => err);
-}
-
 class NTSPlaylist extends Component {
   constructor (props) {
     super(props);
 
     this.state = {
-      loading: false,
+      loadingSuggestions: false,
+      loadingPlaylist: false,
       ntsShowUrl: '',
       ntsShowUrlError: '',
       playlist: [],
       suggestions: [],
-      showSuggestions: false,
-      selected: 0
+      showSuggestions: false
     };
 
-    this.select = this.select.bind(this);
-    this.validateAndSearch = this.validateAndSearch.bind(this);
     this.getPlaylist = this.getPlaylist.bind(this);
+    this.validateAndSearch = this.validateAndSearch.bind(this);
   }
 
 
   componentDidMount () {
-    this.setState({loading: true});
+    this.setState({loadingSuggestions: true});
 
-    initialize(getRecentNTSShows, getPlaylistData)
-      .then(values => this.setState({...values, loading: false}))
-      .catch(err => console.log('error initizlizing in componentDidMount', err));
+    getRecentNTSShows()
+      .then(suggestions => this.setState({suggestions, loadingSuggestions: false}))
+      .catch(err => console.log('error loading suggestions', err));
   }
 
-  select(index) {
-    this.setState({selected: index});
+  getPlaylist(showUrl) {
+    this.setState({loadingPlaylist: true}, () => {
+      getPlaylistData(showUrl)
+        .then(playlist => {
+          this.setState({
+            playlist: playlist,
+            ntsShowUrl: showUrl,
+            ntsShowUrlError: null,
+            loadingPlaylist: false
+          });
+        });
+    });
   }
 
   validateAndSearch(showUrl) {
     const {validUrl, error} = validateNTSShowURL(showUrl);
-
     error ? this.setState({ntsShowUrlError: error}) : this.getPlaylist(validUrl);
-  }
-
-  getPlaylist(showUrl) {
-    getPlaylistData(showUrl)
-      .then(playlist => {
-        this.setState({playlist: playlist, ntsShowUrlError: null});
-      });
   }
 
   render() {
@@ -69,27 +62,24 @@ class NTSPlaylist extends Component {
         <div className={styles.contentWrapper}>
           <Header
             search={this.validateAndSearch}
-            ntsPlaylistUrl={this.state.ntsPlaylistUrl}
+            ntsShowUrl={this.state.ntsShowUrl}
             ntsShowUrlError={this.state.ntsShowUrlError}
             />
           <div className={styles.content}>
             <div className={styles.suggestionContainer}>
               <Suggestions
-                suggestions={this.state.suggestions}
+                loading={this.state.loadingSuggestions}
+                select={suggestionUrl => this.validateAndSearch(suggestionUrl)}
                 show={this.state.showSuggestions}
+                suggestions={this.state.suggestions}
                 toggle={() => this.setState({showSuggestions: !this.state.showSuggestions})}
                 />
             </div>
             <div className={styles.playlistContainer}>
-              {
-                this.state.loading
-                  ? <div>LOADING...</div>
-                  : <Playlist
-                      playlist={this.state.playlist}
-                      select={this.select}
-                      selected={this.state.selected}
-                      />
-              }
+              <Playlist
+                loading={this.state.loadingPlaylist}
+                playlist={this.state.playlist}
+                />
             </div>
           </div>
         </div>

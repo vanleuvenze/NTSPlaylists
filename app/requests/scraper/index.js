@@ -8,7 +8,9 @@ tracklist information
 
 */
 
-export function getNTSTracklist(url='http://www.nts.live/shows/guests/episodes/rush-hour-presents-hunee-31st-january-2015') {
+export function getNTSTracklist(url) {
+  if (!url) return Promise.resolve({});
+
   return fetch(url)
     .then(res => res.text())
     .then(html => {

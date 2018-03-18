@@ -2,14 +2,13 @@
   flex: 1;
   width: 100%;
   max-width: 500px;
-	padding: 12px;
 }
 
 .top {}
 
 .bottom {
 	font-size: 12px;
-	min-height: 28px;
+	min-height: 16px;
 }
 
 .error {

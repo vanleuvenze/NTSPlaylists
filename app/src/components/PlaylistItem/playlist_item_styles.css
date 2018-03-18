@@ -1,5 +1,6 @@
 .item {
 	overflow: hidden;
+	margin-bottom: 24px;
 }
 
 .default {
@@ -12,20 +13,5 @@
 .default:hover {
 	cursor: pointer;
 }
-
-.selected {
-	height: auto;
-	max-height: 1000px;
-	transition: max-height .5s ease-in;
-	padding: 12px 0px;
-}
-
-.fullContent {
-
-}
-
-.videoContainer {}
-
-.contentContainer {}
 
 
